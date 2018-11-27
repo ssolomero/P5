@@ -11,14 +11,6 @@ function start() {
         .attr("width", width)
         .attr("height", height);
 
-    var nodes = [];
-    var links = [];
-
-    /*var input = d3.select(input)
-        .append('input')
-        .attr('width', width)
-        .attr('height', height);*/
-
     d3.select(document.getElementById('button'))
       .on('click', function(d) {
 
@@ -29,14 +21,14 @@ function start() {
         if (document.getElementById('input2').value != null) {
           var input2 = document.getElementById('input2').value;
         }
-        nodes.push(input1, input2);
-        console.log(nodes)
-        // Load Data
+
         var commonDirectors = [];
         var actedWith = [];
         var moviesTogether = [];
         var actor1Array = [];
         var actor2Array = [];
+
+        // Load Data
         d3.csv('movies.csv', function(d) {
           return {
             director: d.director_name,
@@ -47,7 +39,7 @@ function start() {
             rating: d.imdb_score
           };
         }, function(data) {
-            for (let i=0; i<data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
               if (data[i].actor1 === input1 || data[i].actor2 === input1 || data[i].actor3 === input1) {
                 // Gets movie with both actors
                 if (data[i].actor1 === input2 || data[i].actor2 === input2 || data[i].actor3 === input2) {
@@ -69,13 +61,16 @@ function start() {
                   commonDirectors.push(actor1Array[i].director)
                 }
                 // Acted with
-                if (actor1Array[i].actor1 === actor2Array[j].actor1 || actor1Array[i].actor1 === actor2Array[j].actor2 || actor1Array[i].actor1 === actor2Array[j].actor3) {
+                if ((actor1Array[i].actor1 === actor2Array[j].actor1 || actor1Array[i].actor1 === actor2Array[j].actor2 || actor1Array[i].actor1 === actor2Array[j].actor3)
+                      && actor1Array[i].actor1 != input1 && actor1Array[i].actor1 != input2) {
                   actedWith.push(actor1Array[i].actor1)
                 }
-                if (actor1Array[i].actor2 === actor2Array[j].actor2 || actor1Array[i].actor2 === actor2Array[j].actor3) {
+                if ((actor1Array[i].actor2 === actor2Array[j].actor1 || actor1Array[i].actor2 === actor2Array[j].actor2 || actor1Array[i].actor2 === actor2Array[j].actor3)
+                    && actor1Array[i].actor2 != input1 && actor1Array[i].actor2 != input2) {
                   actedWith.push(actor1Array[i].actor2)
                 }
-                if (actor1Array[i].actor3 === actor2Array[j].actor3) {
+                if ((actor1Array[i].actor3 === actor2Array[j].actor1 || actor1Array[i].actor3 === actor2Array[j].actor1 || actor1Array[i].actor3 === actor2Array[j].actor3)
+                    && actor1Array[i].actor3 != input1 && actor1Array[i].actor3 != input2) {
                   actedWith.push(actor1Array[i].actor3)
                 }
               }
