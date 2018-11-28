@@ -77,10 +77,20 @@ function start() {
             }
               console.log(actor1Array)
               console.log(actor2Array)
-              console.log(moviesTogether)
-              console.log(commonDirectors)
-              console.log(actedWith);
+              console.log(removeDuplicates(moviesTogether))
+              console.log(removeDuplicates(commonDirectors))
+              console.log(removeDuplicates(actedWith));
           });
 
     });
   }
+
+  function removeDuplicates(arr){
+    let unique_array = []
+    for(let i = 0;i < arr.length; i++){
+        if(unique_array.indexOf(arr[i]) == -1){
+            unique_array.push(arr[i])
+        }
+    }
+    return unique_array
+}
