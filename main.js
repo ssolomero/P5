@@ -8,6 +8,11 @@ function start() {
     var height = 500;
 
     var commonElements = [];
+    var commonDirectors = [];
+    var actedWithArr = [];
+    var moviesTogether = [];
+    var actor1Array = [];
+    var actor2Array = [];
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -16,8 +21,16 @@ function start() {
     d3.select(document.getElementById('button'))
       // When button is clicked
       .on('click', function(d) {
-        // Clear Common Elements Array
+        // Clears Arrays
         commonElements = [];
+        commonDirectors = [];
+        actedWithArr = [];
+        moviesTogether = [];
+        actor1Array = [];
+        actor2Array = [];
+
+        d3.selectAll("svg > *").remove();
+
         // Input Values
         if (document.getElementById('input1').value != null) {
           var input1 = document.getElementById('input1').value;
@@ -27,13 +40,6 @@ function start() {
           var input2 = document.getElementById('input2').value;
           commonElements.push({Actor2: input2})
         }
-
-        var commonDirectors = [];
-        var actedWithArr = [];
-        var moviesTogether = [];
-        var actor1Array = [];
-        var actor2Array = [];
-
 
         // Load Data
         d3.csv('movies.csv', function(d) {
@@ -105,7 +111,7 @@ function start() {
 
 
               // Add circles
-              var actorCircles = svg.selectAll("circle")
+              var circles = svg.selectAll("circle")
                   .data(commonElements)
                   .enter()
                   .append("circle")
@@ -117,13 +123,16 @@ function start() {
                   .classed('director', function(d) { return d.Director != null})
                   .classed('movie', function(d) { return d.Title != null})
                   .classed('actedWith', function(d) { return d.ActedWith != null});
+
+
               // Change location of Actor 2 circle
               d3.select('.actor2')
                 .attr("cx", 700);
               // Change size and location of common elements
               d3.selectAll('.director, .movie, .actedWith')
                 .attr("r", 10)
-                .attr("cx", 400);
+                .attr("cx", function() { return 400})
+                .attr("cy", function(d,i) { return i*25 + 80});
           });
 
     });
@@ -139,13 +148,4 @@ function removeDuplicates(arr){
         }
     }
     return unique_array
-}
-
-function dupilicate(arr1, arr2) {
-  for(let i = 0; i < arr1.length; i++) {
-    if (arr2[i].director === arr1[i].Director) {
-      return true;
-    }
-    else return false;
-  }
 }
