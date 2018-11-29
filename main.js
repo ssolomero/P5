@@ -16,7 +16,8 @@ function start() {
     d3.select(document.getElementById('button'))
       // When button is clicked
       .on('click', function(d) {
-
+        // Clear Common Elements Array
+        commonElements = [];
         // Input Values
         if (document.getElementById('input1').value != null) {
           var input1 = document.getElementById('input1').value;
@@ -28,7 +29,7 @@ function start() {
         }
 
         var commonDirectors = [];
-        var actedWith = [];
+        var actedWithArr = [];
         var moviesTogether = [];
         var actor1Array = [];
         var actor2Array = [];
@@ -51,8 +52,7 @@ function start() {
                 actor1Array.push(data[i]);
                 // Gets movie with both actors
                 if (data[i].actor1 === input2 || data[i].actor2 === input2 || data[i].actor3 === input2) {
-                  moviesTogether.push({Title: data[i].title});
-                  commonElements.push({Title: data[i].title});
+                  moviesTogether.push(data[i].title);
                 }
               }
               // Array of actor 2
@@ -65,36 +65,44 @@ function start() {
               for (let j = 0; j < actor2Array.length; j++) {
                 // Common Directors
                 if (actor1Array[i].director === actor2Array[j].director) {
-                  commonDirectors.push({Director: actor1Array[i].director})
-                  commonElements.push({Director: actor1Array[i].director})
-
+                  commonDirectors.push(actor1Array[i].director)
                 }
                 // Acted with
                 if ((actor1Array[i].actor1 === actor2Array[j].actor1 || actor1Array[i].actor1 === actor2Array[j].actor2 || actor1Array[i].actor1 === actor2Array[j].actor3)
                       && actor1Array[i].actor1 != input1 && actor1Array[i].actor1 != input2) {
-                  actedWith.push({ActedWith:actor1Array[i].actor1})
-                  commonElements.push({ActedWith:actor1Array[i].actor1})
+                  actedWithArr.push(actor1Array[i].actor1)
                 }
                 if ((actor1Array[i].actor2 === actor2Array[j].actor1 || actor1Array[i].actor2 === actor2Array[j].actor2 || actor1Array[i].actor2 === actor2Array[j].actor3)
                     && actor1Array[i].actor2 != input1 && actor1Array[i].actor2 != input2) {
-                  actedWith.push({ActedWith: actor1Array[i].actor2})
-                  commonElements.push({ActedWith: actor1Array[i].actor2})
+                  actedWithArr.push(actor1Array[i].actor2)
                 }
                 if ((actor1Array[i].actor3 === actor2Array[j].actor1 || actor1Array[i].actor3 === actor2Array[j].actor2 || actor1Array[i].actor3 === actor2Array[j].actor3)
                     && actor1Array[i].actor3 != input1 && actor1Array[i].actor3 != input2) {
-                  actedWith.push({ActedWith:actor1Array[i].actor3})
-                  commonElements.push({ActedWith:actor1Array[i].actor3})
+                  actedWithArr.push(actor1Array[i].actor3)
                 }
               }
             }
+              // Removes Duplicates and coppies array in to commonElements array
+              moviesTogether = removeDuplicates(moviesTogether)
+              moviesTogether.forEach(function(i) {
+                commonElements.push({Title: i})
+              });
+              commonDirectors = removeDuplicates(commonDirectors)
+              commonDirectors.forEach(function(i) {
+                commonElements.push({Director: i})
+              });
+              actedWithArr = removeDuplicates(actedWithArr)
+              actedWithArr.forEach(function(i) {
+                commonElements.push({ActedWith: i})
+              });
 
-              console.log(moviesTogether)
-              console.log(commonDirectors)
-              console.log(actedWith)
               console.log(actor1Array)
               console.log(actor2Array)
+              console.log(moviesTogether)
+              console.log(commonDirectors)
+              console.log(actedWithArr)
               console.log(commonElements)
-              
+
 
               // Add circles
               var actorCircles = svg.selectAll("circle")
@@ -123,7 +131,7 @@ function start() {
 
 
   // Remove Duplicates in Array
-/*  function removeDuplicates(arr){
+function removeDuplicates(arr){
     let unique_array = []
     for(let i = 0;i < arr.length; i++){
         if(unique_array.indexOf(arr[i]) == -1){
@@ -131,10 +139,13 @@ function start() {
         }
     }
     return unique_array
-}*/
+}
 
-function removeDuplicates(myArr, prop) {
-    return myArr.filter((obj, pos, arr) => {
-        return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-    });
+function dupilicate(arr1, arr2) {
+  for(let i = 0; i < arr1.length; i++) {
+    if (arr2[i].director === arr1[i].Director) {
+      return true;
+    }
+    else return false;
+  }
 }
