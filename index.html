@@ -8,13 +8,24 @@
 
 </head>
 <style type="text/css">
+  body {
+    font-family: Arial;
+  }
+  .left {
+    stroke: gray;
+    fill: gray;
+  }
+  .right {
+    stroke: gray;
+    fill: gray;
+  }
   .actor1 {
     stroke: red;
     fill:red;
   }
   .actor2 {
-    stroke: magenta;
-    fill:magenta;
+    stroke: red;
+    fill:red;
   }
   .director {
     stroke: orange;
@@ -32,16 +43,15 @@
     stroke:skyblue;
     fill:skyblue;
   }
-
-
 </style>
 
 <body>
-  <h1>Actors to Actors</h3>
   <div id="input">
+    <p>Input two actors and see which directors and actors
+      they've both worked with, and also the movies they've been in together  </p>
     <form> Actor 1: <input  id="input1" type="text"></input></form>
     <form> Actor 2: <input  id="input2" type="text"></input></form>
-    <button id="button">See How They Connect!</button>
+    <br> <button id="button">See How They Connect!</button> </br>
   </div>
 </body>
 
