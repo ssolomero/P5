@@ -13,6 +13,7 @@ function start() {
     var moviesTogether = [];
     var actor1Array = [];
     var actor2Array = [];
+    var tooltipText = "";
 
     var svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -49,7 +50,7 @@ function start() {
             actor2: d.actor_2_name,
             actor3: d.actor_3_name,
             title: d.movie_title,
-            rating: d.imdb_score
+            rating: d.imdb_score,
           };
         }, function(data) {
             for (let i = 0; i < data.length; i++) {
@@ -118,11 +119,43 @@ function start() {
                   .attr("cx", 100)
                   .attr("cy", 150)
                   .attr("r", 35)
-                  .classed('actor1', function(d) { return d.Actor1 != null})
-                  .classed('actor2', function(d) { return d.Actor2 != null})
-                  .classed('director', function(d) { return d.Director != null})
-                  .classed('movie', function(d) { return d.Title != null})
-                  .classed('actedWith', function(d) { return d.ActedWith != null});
+                  .attr("class", "circle")
+                  .classed('actor1', function(d) { return d.Actor1 != null })
+                  .classed('actor2', function(d) { return d.Actor2 != null })
+                  .classed('director', function(d) { return d.Director != null })
+                  .classed('movie', function(d) { return d.Title != null })
+                  .classed('actedWith', function(d) { return d.ActedWith != null })
+                  .on("mouseover", function(d) {
+                                if (d.Actor1 != null) {
+                                    tooltip.text("Actor 1: " + d.Actor1);
+                                } else if (d.Actor2 != null) {
+                                    tooltip.text("Actor 2: " + d.Actor2);
+                                } else if (d.Director != null) {
+                                    tooltip.text("Director: " + d.Director);
+                                } else if (d.Title != null) {
+                                    tooltip.text("Title: " + d.Title);
+                                } else if (d.ActedWith != null) {
+                                    tooltip.text("Acted with: " + d.ActedWith);
+                                }
+                                return tooltip.style("visibility", "visible");
+                              })
+                  .on("mousemove", function(d) {
+                                return tooltip
+                                      .style("top", (d3.event.pageY - 10) + "px")
+                                      .style("left", (d3.event.pageX + 10) + "px");
+                              })
+                  .on("mouseout", function(d) {
+                                return tooltip.style("visibility", "hidden")
+                              });
+
+              // text to show when hovering over a circle
+              var tooltip = d3.select("body")
+                              .append("div")
+                              .style("position", "absolute")
+                              .style("z-index", "10")
+                              .style("visibility", "hidden")
+                              .text("testing one two three");
+
 
 
               // Change location of Actor 2 circle
@@ -149,3 +182,4 @@ function removeDuplicates(arr){
     }
     return unique_array
 }
+
